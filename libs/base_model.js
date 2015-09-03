@@ -333,7 +333,7 @@ BaseModel._create_table_query = function(table_name,schema){
  */
 BaseModel._create_index_query = function(table_name, index_name){
     var query = util.format(
-        "CREATE INDEX IF NOT EXISTS ON %s (%s);",
+        "CREATE INDEX IF NOT EXISTS ON %s (\"%s\");",
         table_name,
         index_name
     );
@@ -507,7 +507,7 @@ BaseModel._create_where_clause = function(query_ob){
                     throw(build_error('model.find.invalidinset'));
                 query_relations.push( util.format(
                     '%s %s %s',
-                    k,op,this._get_db_value_expression(k,first_value)
+                    '"' + k + '"',op,this._get_db_value_expression(k,first_value)
                 ));
             }
             else {
@@ -879,7 +879,7 @@ BaseModel.prototype.save = function(options, callback){
                 return callback(build_error('model.save.unsetkey',f));
         }
 
-        identifiers.push(f);
+        identifiers.push('"' + f + '"');
 
         try{
             values.push(this.constructor._get_db_value_expression(f,fieldvalue));
